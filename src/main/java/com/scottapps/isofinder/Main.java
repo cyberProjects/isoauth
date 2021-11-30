@@ -1,14 +1,18 @@
 package com.scottapps.isofinder;
 
-import com.scottapps.isofinder.model.Device;
+import com.scottapps.isofinder.model.DeviceImpl;
 
 public class Main {
 
+    private static String sharedKey = "SomeSharedSecret";
+
     public static void main(String[] args) {
-        var device1 = new Device("SomeSecret2");
-        System.out.println(Device.bytesToHex(device1.getG1()));
-        System.out.println(Device.bytesToHex(device1.getG2()));
-        System.out.println(device1.getPi());
-        System.out.println(Device.bytesToHex(device1.applyInversePi(device1.getG2())));
+        // SIMULATION 1: Preshared key for Random seed
+        var d1 = new DeviceImpl(100L);
+        d1.initialize();
+        var d2 = new DeviceImpl(100L);
+        d2.initialize();
+        var result = d2.accept(d1.prove(d2.verify(d1.getH())));
+        System.out.println("Result of attestation round: " + result);
     }
 }
