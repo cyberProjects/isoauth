@@ -1,5 +1,7 @@
 package com.scottapps.isofinder.model;
 
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.*;
 
 public class DeviceImpl implements Device {
@@ -32,7 +34,7 @@ public class DeviceImpl implements Device {
     @Override
     public void initialize() {
         // seeding Random for determinism while testing
-        var random = new Random(this.seed);
+        var random = new SecureRandom("SECRET_PASSWORD".getBytes(StandardCharsets.UTF_8));
         for (int i = 0; i < this.n; i++) {
             g1.add(random.nextLong());
         }
@@ -61,7 +63,7 @@ public class DeviceImpl implements Device {
     public boolean verify(List<Long> h) {
         this.h = h;
         System.out.println("Received commitment graph: " + this.h);
-        var random = new Random();
+        var random = new SecureRandom();
         this.challenge = random.nextBoolean();
         return this.challenge;
     }
